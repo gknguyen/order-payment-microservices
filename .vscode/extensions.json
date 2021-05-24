@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "msjsdiag.debugger-for-chrome",
+        "ms-azuretools.vscode-docker",
+        "mikestead.dotenv",
+        "dbaeumer.vscode-eslint",
+        "mkxml.vscode-filesize",
+        "wix.vscode-import-cost",
+        "esbenp.prettier-vscode",
+        "snyk-security.vscode-vuln-cost"
+    ]
+}

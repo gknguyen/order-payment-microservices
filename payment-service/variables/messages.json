@@ -1,0 +1,21 @@
+{
+  "AUTH": {
+    "DDOS": "Too many accounts created from this IP, please try again after 5 minutes",
+    "USER_NOT_FOUND": "User not found",
+    "INCORRECT_PASSWORD": "Incorrect password"
+  },
+  "HTTP": {
+    "PARAMS": {
+      "REQUIRED": "Missing input params",
+      "INVALID": "Invalid input params"
+    }
+  },
+  "TOKEN": {
+    "VALID": "Valid token",
+    "INVALID": "Invalid token",
+    "NOT_FOUND": "Token not found",
+    "PAYLOAD_INVALID": "Invalid token data",
+    "EXPIRED": "Token expired",
+    "DATA_INVALID": "Token data do not match with DB data"
+  }
+}

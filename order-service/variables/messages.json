@@ -1,0 +1,36 @@
+{
+  "AUTH": {
+    "DDOS": "Too many accounts created from this IP, please try again after 5 minutes",
+    "USER_NOT_FOUND": "User not found",
+    "INCORRECT_PASSWORD": "Incorrect password"
+  },
+  "HTTP": {
+    "PARAMS": {
+      "REQUIRED": "Missing input params",
+      "INVALID": "Invalid input params"
+    }
+  },
+  "TOKEN": {
+    "VALID": "Valid token",
+    "INVALID": "Invalid token",
+    "NOT_FOUND": "Token not found",
+    "PAYLOAD_INVALID": "Invalid token data",
+    "EXPIRED": "Token expired",
+    "DATA_INVALID": "Token data do not match with DB data"
+  },
+  "DATABASES": {
+    "MYSQL": {
+      "USER_TABLE": {
+        "UNIQUE_USERNAME": "This account already exists",
+        "USERNAME_NOT_NULL": "Username cannot be empty",
+        "PASSWORD_NOT_NULL": "Password cannot be empty"
+      },
+      "ORDER_TABLE": {
+        "UNIQUE_ORDER": "This order already exists",
+        "NAME_NOT_NULL": "Order name cannot be empty",
+        "STATUS_NOT_NULL": "Order status cannot be empty",
+        "INVALID_STATUS": "Invalid status"
+      }
+    }
+  }
+}

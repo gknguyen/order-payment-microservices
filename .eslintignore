@@ -1,0 +1,10 @@
+# folders
+**/node_modules/*
+coverage/
+lib/
+
+# files
+.eslintrc.js
+minify.js
+babel.config.js
+jest.config.js

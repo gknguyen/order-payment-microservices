@@ -1,0 +1,14 @@
+# dependencies
+node_modules
+
+# testing
+reports
+
+# production
+lib
+
+# folder
+logs
+
+# file
+.dccache

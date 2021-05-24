@@ -1,0 +1,3 @@
+{
+  "GET_USER_DATA": "SELECT `id`, `username` FROM `user` WHERE `user`.`id` = ? AND `user`.`username` = ?"
+}

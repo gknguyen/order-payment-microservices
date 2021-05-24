@@ -1,0 +1,7 @@
+{
+  "LOG": {
+    "MAIN_FOLDER": "logs",
+    "ACCESS_FOLDER": "access",
+    "ERROR_FOLDER": "error"
+  }
+}
