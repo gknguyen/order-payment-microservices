@@ -22,7 +22,6 @@ function processOrder() {
   return errorHandler(result, (req: express.Request, res: express.Response) => {
     /** get data from request body */
     const order: Order | null | undefined = req.body.order;
-    console.log(order);
 
     /** check input */
     if (order?.id && order?.name && order?.status) {

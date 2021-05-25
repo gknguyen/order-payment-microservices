@@ -25,10 +25,12 @@ server.listen(ENV.PORT);
 server.on('error', onError);
 server.on('listening', onListening);
 
-/* ============================================================================================================================ */
-/*
- functions
- */
+export default server;
+
+/** ================================================================================== */
+/**
+functions
+*/
 
 function onListening() {
   const addr = server.address();

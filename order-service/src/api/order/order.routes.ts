@@ -12,7 +12,7 @@ import { OrderStatus, PaymentStatus } from '../../config/enum';
 const orderRouter = express.Router();
 
 /** get APIs */
-orderRouter.get('/checkOrderStatus/:id', checkOrderStatus());
+orderRouter.get('/checkOrderStatus', checkOrderStatus());
 
 /** post APIs */
 orderRouter.post(
@@ -33,8 +33,8 @@ functions
 function checkOrderStatus() {
   const result = { ...VARIABLE.RESULT, function: 'checkOrderStatus()' };
   return errorHandler(result, async (req: express.Request, res: express.Response) => {
-    /** get data from request params */
-    const orderId: string | null | undefined = req.params.id;
+    /** get data from request query */
+    const orderId: string | null | undefined = req.query.id as string;
 
     /** check input */
     if (orderId) {
@@ -45,9 +45,9 @@ function checkOrderStatus() {
       });
 
       /** send response to client-side (FE) */
-      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.setHeader('Content-Type', 'text/plain; charset=utf-8');
       if (order) res.status(STATUS_CODE.OK).send(order.status);
-      else res.status(STATUS_CODE.NO_CONTENT).send(null);
+      else res.status(STATUS_CODE.NO_CONTENT).send('');
     } else {
       result.code = STATUS_CODE.PRECONDITION_FAILED;
       throw VARIABLE.MESSAGES.HTTP.PARAMS.REQUIRED;
@@ -67,7 +67,7 @@ function createOrder() {
       const transaction =
         (req.body.transaction as sequelize.Transaction) || (await mysql.transaction());
       if (!req.body.transaction) req.body.transaction = transaction;
-      result.transaction = transaction;
+      if (!result.transaction) result.transaction = transaction;
 
       /** check input */
       if (orderName) {
@@ -105,7 +105,7 @@ function processPayment() {
       const transaction =
         (req.body.transaction as sequelize.Transaction) || (await mysql.transaction());
       if (!req.body.transaction) req.body.transaction = transaction;
-      result.transaction = transaction;
+      if (!result.transaction) result.transaction = transaction;
 
       /** check input */
       if (order?.id) {
@@ -151,7 +151,7 @@ function updateOrder() {
       const transaction =
         (req.body.transaction as sequelize.Transaction) || (await mysql.transaction());
       if (!req.body.transaction) req.body.transaction = transaction;
-      result.transaction = transaction;
+      if (!result.transaction) result.transaction = transaction;
 
       /** check input */
       if (orderId && paymentStatus) {

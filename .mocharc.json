@@ -1,0 +1,22 @@
+{
+  "diff": true,
+  "exit": true,
+  "extension": [
+    "js",
+    "ts"
+  ],
+  "package": "./package.json",
+  "reporter": "mochawesome-screenshots",
+  "require": [
+    "ts-node/register"
+  ],
+  "timeout": "20000",
+  "ui": "bdd",
+  "watch": false,
+  "watch-files": [
+    "./test/*.test.ts"
+  ],
+  "watch-ignore": [
+    "lib/vendor"
+  ]
+}

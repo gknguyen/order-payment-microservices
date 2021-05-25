@@ -24,14 +24,14 @@ export function verifyToken() {
       /** check token existed or not */
       if (token) {
         /** decode token to get user data */
-        const decodedToken: any = jsonwebtoken.decode(token, { complete: true });
+        const decodedToken = jsonwebtoken.decode(token, { complete: true });
         const userInfo: UserInfo | null | undefined = decodedToken?.payload;
 
         if (userInfo) {
           /** check token TTL */
           const TTL = Math.round(new Date().getTime() / 1000);
 
-          if (parseInt(decodedToken.payload.exp) > TTL) {
+          if (decodedToken && parseInt(decodedToken.payload.exp) > TTL) {
             /** get user data in token is existed in DB */
             MYSQL.query(
               VARIABLE.QUERIES.GET_USER_DATA,

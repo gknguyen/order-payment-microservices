@@ -2,6 +2,7 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": [
+      "./tsconfig.json",
       "./order-service/tsconfig.json",
       "./payment-service/tsconfig.json"
     ]
@@ -44,7 +45,7 @@
     // "complexity": ["error", { "max": 10 }],
     "consistent-return": "error",
     "default-case": "error",
-    "default-param-last": "warn",
+    "default-param-last": "off",
     "max-classes-per-file": [
       "error",
       1

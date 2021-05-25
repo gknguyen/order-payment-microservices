@@ -14,6 +14,9 @@
   },
   "homepage": "https://github.com/gknguyen/order-payment-microservices#readme",
   "scripts": {
+    "test": "mocha --watch --reporter-options reportDir=reports/tests/unit --reporter-options jsonReport=true",
+    "coverage": "nyc mocha --reporter-options reportDir=reports/tests/unit --reporter-options jsonReport=true",
+    "complex": "ts-plato --recurse --quiet --eslint ./.eslintrc --noempty --dir ./reports/complex ./order-service/src ./payment-service/src",
     "prettier": "prettier --write ./order-service/src --write ./payment-service/src",
     "eslint:order": "eslint --quiet ./order-service/src --ext .js,.ts",
     "eslint:payment": "eslint --quiet ./payment-service/src --ext .js,.ts",
@@ -21,15 +24,22 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint-check"
+      "pre-commit": "npm run review"
     }
   },
   "dependencies": {
-    "concurrently": "^6.2.0"
+    "concurrently": "^6.2.0",
+    "dotenv": "^10.0.0",
+    "http-status": "^1.5.0"
   },
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.1",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "^15.6.1",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
     "@typescript-eslint/parser": "^4.24.0",
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
     "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-flowtype": "^5.7.2",
@@ -37,7 +47,13 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^3.4.0",
     "husky": "^6.0.0",
+    "mocha": "^8.4.0",
+    "mochawesome": "^6.2.2",
+    "mochawesome-screenshots": "^1.7.3",
+    "nyc": "^15.1.0",
     "prettier": "^2.3.0",
+    "ts-node": "^10.0.0",
+    "ts-plato": "0.0.6",
     "typescript": "^4.2.4"
   }
 }

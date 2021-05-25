@@ -22,10 +22,10 @@ server.listen(ENV.PORT);
 server.on('error', onError);
 server.on('listening', onListening);
 
-/* ============================================================================================================================ */
-/*
-  functions
-  */
+/** ================================================================================== */
+/**
+functions
+*/
 
 function onListening() {
   const addr = server.address();
