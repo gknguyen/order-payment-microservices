@@ -1,8 +1,8 @@
+import Crypto from 'crypto-js';
+import jsonwebtoken from 'jsonwebtoken';
 import ENV from '../../config/env';
 import { UserInfo } from '../../config/type';
 import { User } from '../../database/mysql/mysql.form';
-import jsonwebtoken from 'jsonwebtoken';
-import Crypto from 'crypto-js';
 
 class AuthService {
   public getToken = (user: User) =>

@@ -14,7 +14,7 @@
   "ui": "bdd",
   "watch": false,
   "watch-files": [
-    "./test/*.test.ts"
+    "./tests/*.test.ts"
   ],
   "watch-ignore": [
     "lib/vendor"

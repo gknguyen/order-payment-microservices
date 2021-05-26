@@ -4,7 +4,8 @@ dotenv.config();
 
 const ENV = {
   NODE_ENV: process.env.NODE_ENV || 'development',
-  PORT: process.env.PORT || '4000',
+  PORT: process.env.ORDER_SERVICE_PORT || '',
+  DELIVERY_TIME: process.env.DELIVERY_TIME || '',
 
   COOKIE: {
     SECRET: process.env.COOKIE_SECRET || '',

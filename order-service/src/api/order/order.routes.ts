@@ -1,13 +1,15 @@
+import axios from 'axios';
 import express from 'express';
 import STATUS_CODE from 'http-status';
 import sequelize from 'sequelize';
+import { OrderStatus, PaymentStatus } from '../../config/enum';
+import ENV from '../../config/env';
 import errorHandler from '../../config/error.handler';
+import util from '../../config/util';
 import VARIABLE from '../../config/variable';
 import mysql from '../../database/mysql/mysql.auth';
 import { Order } from '../../database/mysql/mysql.form';
 import MYSQL from '../../database/mysql/mysql.main';
-import axios from 'axios';
-import { OrderStatus, PaymentStatus } from '../../config/enum';
 
 const orderRouter = express.Router();
 
@@ -22,6 +24,9 @@ orderRouter.post(
   updateOrder(),
   deliverOrder(),
 );
+
+/** put APIs */
+orderRouter.put('/cancelOrder', cancelOrder());
 
 export default orderRouter;
 
@@ -122,11 +127,20 @@ function processPayment() {
             req.body.paymentStatus = result.data;
             next();
           })
-          .catch((err) => {
-            /** declined => continues the execution */
-            req.query.id = order.id.toString();
-            req.body.paymentStatus = err.response.data;
-            next();
+          .catch(async (err) => {
+            if (err.response?.status === STATUS_CODE.EXPECTATION_FAILED) {
+              /** declined => continues the execution */
+              req.query.id = order.id.toString();
+              req.body.paymentStatus = err.response.data;
+              next();
+            } else {
+              /** send response to client-side (FE) */
+              await transaction.rollback();
+              res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+              res
+                .status(err.response?.status || STATUS_CODE.INTERNAL_SERVER_ERROR)
+                .send(err.response?.data || '');
+            }
           });
       } else {
         result.code = STATUS_CODE.PRECONDITION_FAILED;
@@ -174,7 +188,9 @@ function updateOrder() {
 
         /** send response to client-side (FE) */
         await transaction.commit();
-        res.status(STATUS_CODE.OK).send(orderStatus);
+        if (orderStatus === OrderStatus.confirmed)
+          res.status(STATUS_CODE.OK).send(orderStatus);
+        else res.status(STATUS_CODE.EXPECTATION_FAILED).send(orderStatus);
 
         /** if the order have been confirmed => continues the execution */
         if (orderStatus === OrderStatus.confirmed) next();
@@ -193,17 +209,42 @@ function deliverOrder() {
     const orderId = req.query.id as string;
 
     /** call query to update data */
-    setTimeout(
-      () =>
-        MYSQL.order.update(
-          {
-            status: OrderStatus.delivered,
-          },
-          {
-            where: { id: orderId },
-          },
-        ),
-      10000 /** process run after 10s */,
-    );
+    setTimeout(() => {
+      MYSQL.order.update(
+        {
+          status: OrderStatus.delivered,
+        },
+        {
+          where: { id: orderId },
+        },
+      );
+    }, util.convertStringToNumber(ENV.DELIVERY_TIME) /** process run after Xs */);
+  });
+}
+
+function cancelOrder() {
+  const result = { ...VARIABLE.RESULT, function: 'cancelOrder()' };
+  return errorHandler(result, (req: express.Request, res: express.Response) => {
+    /** get data from request query */
+    const orderId: string | null | undefined = req.query.id as string;
+
+    /** check input */
+    if (orderId) {
+      /** call query to update date */
+      MYSQL.order.update(
+        {
+          status: OrderStatus.cancelled,
+        },
+        {
+          where: { id: orderId },
+        },
+      );
+
+      /** send response to client-side (FE) */
+      res.status(STATUS_CODE.OK).send(OrderStatus.cancelled);
+    } else {
+      result.code = STATUS_CODE.PRECONDITION_FAILED;
+      throw VARIABLE.MESSAGES.HTTP.PARAMS.REQUIRED;
+    }
   });
 }

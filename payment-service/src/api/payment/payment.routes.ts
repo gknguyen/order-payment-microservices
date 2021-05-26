@@ -25,8 +25,7 @@ function processOrder() {
 
     /** check input */
     if (order?.id && order?.name && order?.status) {
-      /** send response to client-side (FE)
-       * or continues the execution */
+      /** send response to client-side (FE) */
       if (faker.datatype.number() % 2 === 0)
         res.status(STATUS_CODE.OK).send(PaymentStatus.confirmed);
       else res.status(STATUS_CODE.EXPECTATION_FAILED).send(PaymentStatus.declined);

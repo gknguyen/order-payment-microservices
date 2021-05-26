@@ -1,9 +1,9 @@
-import MYSQL from './database/mysql/mysql.main';
 import Crypto from 'crypto-js';
-import ENV from './config/env';
 import fs from 'fs';
 import path from 'path';
+import ENV from './config/env';
 import VARIABLE from './config/variable';
+import MYSQL from './database/mysql/mysql.main';
 
 export const initFolder = () => {
   const mainLogFolderPath = path.join(__dirname, `../${VARIABLE.COMMON.LOG.MAIN_FOLDER}`);

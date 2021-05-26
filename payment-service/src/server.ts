@@ -1,8 +1,8 @@
-import app from './middleware';
-import http from 'http';
 import debug from 'debug';
+import http from 'http';
 import ENV from './config/env';
 import MYSQL from './database/mysql/mysql.auth';
+import app from './middleware';
 
 const server = http.createServer(app);
 const logger = debug('server');
@@ -21,6 +21,8 @@ MYSQL.connect((err) => {
 server.listen(ENV.PORT);
 server.on('error', onError);
 server.on('listening', onListening);
+
+export default server;
 
 /** ================================================================================== */
 /**

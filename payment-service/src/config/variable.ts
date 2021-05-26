@@ -1,6 +1,6 @@
-import common from '../../variables/common.json';
-import messages from '../../variables/messages.json';
-import queries from '../../variables/queries.json';
+import common from '../variables/common.json';
+import messages from '../variables/messages.json';
+import queries from '../variables/queries.json';
 import { HTTPdata } from './type';
 
 const VARIABLE = {

@@ -1,5 +1,5 @@
-import common from '../../variables/common.json';
-import messages from '../../variables/messages.json';
+import common from '../variables/common.json';
+import messages from '../variables/messages.json';
 import { HTTPdata } from './type';
 
 const VARIABLE = {

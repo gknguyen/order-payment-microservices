@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:latest
+    restart: always
+    volumes:
+      - ./mysqldb:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=order_payment
+    ports:
+      - 6603:3306
+    volumes:
+      - db-config:/etc/mysql
+      - db-data:/var/lib/mysql
+      - ./db/backup/files/:/data_backup/data
+
+  order:
+    image: gknguyen/order-service
+    environment:
+      - NODE_ENV=production
+      - MYSQL_CONNECTION=mysql://root:@127.0.0.1:6603/order_payment
+    ports:
+      - 4100:4000
+    depends_on:
+      - mysql
+
+  payment:
+    image: gknguyen/payment-service
+    environment:
+      - NODE_ENV=production
+      - MYSQL_CONNECTION=mysql://root:@127.0.0.1:6603/order_payment
+    ports:
+      - 5100:5000
+    depends_on:
+      - mysql
+
+volumes:
+  db-config:
+  db-data:

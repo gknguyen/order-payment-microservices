@@ -14,8 +14,8 @@
   },
   "homepage": "https://github.com/gknguyen/order-payment-microservices#readme",
   "scripts": {
-    "test": "mocha --watch --reporter-options reportDir=reports/tests/unit --reporter-options jsonReport=true",
-    "coverage": "nyc mocha --reporter-options reportDir=reports/tests/unit --reporter-options jsonReport=true",
+    "test:UT": "nyc mocha ./tests/unit/**/*.test.ts --reporter-options reportDir=reports/tests/unit --reporter-options jsonReport=true",
+    "test:IT": "mocha ./tests/integration/**/*.test.ts --reporter-options reportDir=reports/tests/integration --reporter-options jsonReport=true",
     "complex": "ts-plato --recurse --quiet --eslint ./.eslintrc --noempty --dir ./reports/complex ./order-service/src ./payment-service/src",
     "prettier": "prettier --write ./order-service/src --write ./payment-service/src",
     "eslint:order": "eslint --quiet ./order-service/src --ext .js,.ts",

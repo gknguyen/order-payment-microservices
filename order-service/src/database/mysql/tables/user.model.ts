@@ -1,7 +1,7 @@
-import mysql from '../mysql.auth';
-import { User } from '../mysql.form';
 import sequelize from 'sequelize';
 import VARIABLE from '../../../config/variable';
+import mysql from '../mysql.auth';
+import { User } from '../mysql.form';
 
 const UserModel = mysql.define<User>(
   'user',

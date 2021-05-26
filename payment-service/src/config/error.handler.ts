@@ -39,13 +39,15 @@ const errorHandler =
           path.join(__dirname, `${errorFolderPath}/${errorLogFileName}.log`),
           `========================================================` +
             os.EOL +
-            `date: ${JSON.stringify(util.formatDate(new Date()))}` +
+            `date: ${util.formatDate(new Date())}` +
             os.EOL +
-            `API: ${JSON.stringify(req.baseUrl + req.path)}` +
+            `API: ${req.baseUrl}${req.path}` +
             os.EOL +
-            `error: ${JSON.stringify(errorMessage)}` +
+            `error: ${errorMessage}` +
             os.EOL +
-            `username: ${JSON.stringify(userInfo?.username)}` +
+            `username: ${userInfo?.username || ''}` +
+            os.EOL +
+            `function: ${result.function}` +
             os.EOL,
           (err) => err && console.error(err),
         );

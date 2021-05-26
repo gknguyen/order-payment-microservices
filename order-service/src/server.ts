@@ -1,9 +1,9 @@
-import app from './middleware';
-import http from 'http';
 import debug from 'debug';
+import http from 'http';
 import ENV from './config/env';
 import mysql from './database/mysql/mysql.auth';
 import { initData } from './init.data';
+import app from './middleware';
 
 const server = http.createServer(app);
 const logger = debug('server');

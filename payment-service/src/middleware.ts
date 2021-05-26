@@ -2,7 +2,6 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
-import session from 'express-session';
 import fs from 'fs';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -96,15 +95,6 @@ function loadConfigs() {
 
   /** for parsing application/x-www-form-urlencoded */
   app.use(express.urlencoded({ extended: true }));
-
-  /** save information from passport */
-  app.use(
-    session({
-      resave: false,
-      saveUninitialized: true,
-      secret: ENV.COOKIE.SECRET,
-    }),
-  );
 }
 
 function loadRoutes() {

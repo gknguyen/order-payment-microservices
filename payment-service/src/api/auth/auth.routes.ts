@@ -1,12 +1,12 @@
 import express from 'express';
 import STATUS_CODE from 'http-status';
 import jsonwebtoken from 'jsonwebtoken';
+import mysql from 'mysql2';
+import { PaymentStatus } from '../../config/enum';
 import errorHandler from '../../config/error.handler';
 import { UserInfo } from '../../config/type';
 import VARIABLE from '../../config/variable';
 import MYSQL from '../../database/mysql/mysql.auth';
-import mysql from 'mysql2';
-import { PaymentStatus } from '../../config/enum';
 
 /** ================================================================================== */
 /**
@@ -41,10 +41,7 @@ export function verifyToken() {
                 else {
                   const rowDataList = results as mysql.RowDataPacket[];
                   if (rowDataList && rowDataList.length > 0) next();
-                  else {
-                    result.code = STATUS_CODE.UNAUTHORIZED;
-                    throw PaymentStatus.declined;
-                  }
+                  else res.status(STATUS_CODE.UNAUTHORIZED).send(PaymentStatus.declined);
                 }
               },
             );

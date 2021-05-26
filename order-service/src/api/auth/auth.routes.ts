@@ -37,16 +37,12 @@ function login() {
       /** check if user existed or not */
       if (user) {
         /** check password */
-        const isCorrect = authService.comparePassword(loginPassword, user.password);
-
-        if (isCorrect) {
+        if (authService.comparePassword(loginPassword, user.password)) {
           /** get JWT */
           const token = authService.getToken(user);
 
           /** send responses to client-side */
-          res.status(STATUS_CODE.OK).send({
-            token: token,
-          });
+          res.status(STATUS_CODE.OK).send({ token: token });
         } else {
           result.code = STATUS_CODE.UNAUTHORIZED;
           throw VARIABLE.MESSAGES.AUTH.INCORRECT_PASSWORD;
@@ -90,10 +86,9 @@ export function verifyToken() {
               },
             });
 
-            if (user) {
-              /** continues the execution */
-              next();
-            } else {
+            /** continues the execution if pass */
+            if (user) next();
+            else {
               result.code = STATUS_CODE.UNAUTHORIZED;
               throw VARIABLE.MESSAGES.TOKEN.DATA_INVALID;
             }
