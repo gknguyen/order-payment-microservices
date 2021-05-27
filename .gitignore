@@ -9,6 +9,7 @@ lib
 
 # folder
 logs
+.docker-cache
 
 # file
 .dccache

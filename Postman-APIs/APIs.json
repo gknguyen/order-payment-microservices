@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"loginUsername\": \"admin\",\r\n    \"loginPassword\": \"admin\"\r\n}",
+							"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -23,12 +23,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4000/api/auth/login",
+							"raw": "http://localhost:4100/api/auth/login",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "4000",
+							"port": "4100",
 							"path": [
 								"api",
 								"auth",
