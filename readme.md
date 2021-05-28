@@ -11,7 +11,6 @@ Order & Payment -. auth .-> MySQL
 Order -- process --> Payment
 Payment -- response --> Order
 MySQL -. response .-> Order & Payment
-
 :::
 
 ## Technical Approach
