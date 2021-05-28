@@ -5,13 +5,13 @@
 - This project contains 2 small services: Order App & Payment App
 - 2 Apps are connect with MYSQL service for data store & authentication
 
-::: mermaid
+```mermaid
 graph LR
-Order & Payment -. auth .-> MySQL
-Order -- process --> Payment
-Payment -- response --> Order
-MySQL -. response .-> Order & Payment
-:::
+    Order & Payment -. auth .-> MySQL
+    Order -- process --> Payment
+    Payment -- response --> Order
+    MySQL -. response .-> Order & Payment
+```
 
 ## Technical Approach
 
