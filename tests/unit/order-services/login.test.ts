@@ -175,6 +175,19 @@ describe('Unit test - Order service - login feature', () => {
         });
     });
 
+    it('JWT expired', (done) => {
+      chai
+        .request(orderServer)
+        .get(`${MOCK.URL.ORDER_SERVICE.API.CHECK_ORDER_STATUS}?id=${orderId}`)
+        .set('token', MOCK.JWT.EXPIRED)
+        .end((err, res) => {
+          if (err) console.error(err);
+          chai.assert.equal(res.status, STATUS_CODE.UNAUTHORIZED);
+          chai.assert.equal(res.text, VARIABLE.MESSAGES.TOKEN.EXPIRED);
+          done();
+        });
+    });
+
     it('JWT contains incorrect data', (done) => {
       chai
         .request(orderServer)

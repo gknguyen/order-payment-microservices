@@ -53,6 +53,19 @@ describe('Unit test - Payment service - verify JWT feature', () => {
       });
   });
 
+  it('JWT expired', (done) => {
+    chai
+      .request(paymentServer)
+      .get(MOCK.URL.PAYMENT_SERVICE.API.PROCESS_ORDER)
+      .set('token', MOCK.JWT.EXPIRED)
+      .end((err, res) => {
+        if (err) console.error(err);
+        chai.assert.equal(res.status, STATUS_CODE.UNAUTHORIZED);
+        chai.assert.equal(res.text, PaymentStatus.declined);
+        done();
+      });
+  });
+
   it('JWT contains incorrect data', (done) => {
     chai
       .request(paymentServer)
