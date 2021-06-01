@@ -18,8 +18,8 @@
     "test:IT": "mocha ./tests/integration/**/*.test.ts --reporter-options reportDir=reports/tests/integration --reporter-options jsonReport=true",
     "complex": "ts-plato --recurse --quiet --eslint ./.eslintrc --noempty --dir ./reports/complex ./order-service/src ./payment-service/src",
     "prettier": "prettier --write ./order-service/src --write ./payment-service/src",
-    "eslint:order": "eslint --quiet ./order-service/src --ext .js,.ts",
-    "eslint:payment": "eslint --quiet ./payment-service/src --ext .js,.ts",
+    "eslint:order": "eslint --quiet ./order-service/src --ext .js,.ts --format node_modules/eslint-html-reporter/reporter.js --output-file reports/eslint/order/report.html",
+    "eslint:payment": "eslint --quiet ./payment-service/src --ext .js,.ts --format node_modules/eslint-html-reporter/reporter.js --output-file reports/eslint/payment/report.html",
     "review": "concurrently \"npm run prettier\" \"npm run eslint:order\" \"npm run eslint:payment\""
   },
   "husky": {
@@ -42,6 +42,7 @@
     "chai-http": "^4.3.0",
     "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-html-reporter": "^0.7.4",
     "eslint-plugin-flowtype": "^5.7.2",
     "eslint-plugin-import": "^2.23.3",
     "eslint-plugin-jsx-a11y": "^6.4.1",
