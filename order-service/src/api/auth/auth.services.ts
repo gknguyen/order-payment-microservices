@@ -2,13 +2,13 @@ import Crypto from 'crypto-js';
 import jsonwebtoken from 'jsonwebtoken';
 import ENV from '../../config/env';
 import { UserInfo } from '../../config/type';
-import { User } from '../../database/mysql/mysql.form';
+import { User } from '../../database/mongo.form';
 
 class AuthService {
   public getToken = (user: User) =>
     jsonwebtoken.sign(
       {
-        id: user.id,
+        id: user._id,
         username: user.username,
       } as UserInfo,
       ENV.JWT.SECRET,

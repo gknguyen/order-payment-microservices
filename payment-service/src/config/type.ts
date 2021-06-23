@@ -4,6 +4,6 @@ export type HTTPdata = {
 };
 
 export type UserInfo = {
-  id: number;
+  id: string;
   username: string;
 };

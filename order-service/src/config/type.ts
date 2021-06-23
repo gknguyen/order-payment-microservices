@@ -1,12 +1,12 @@
-import sequelize from 'sequelize';
+import mongoose from 'mongoose';
 
 export type HTTPdata = {
   code: number;
-  transaction?: sequelize.Transaction;
+  session?: mongoose.ClientSession;
   function: string;
 };
 
 export type UserInfo = {
-  id: number;
+  id: string;
   username: string;
 };

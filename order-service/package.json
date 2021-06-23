@@ -26,10 +26,9 @@
     "http-status": "^1.5.0",
     "jsonwebtoken": "^8.5.1",
     "moment-timezone": "^0.5.33",
+    "mongoose": "^5.12.14",
     "morgan": "^1.10.0",
-    "mysql2": "^2.2.5",
-    "node-prune": "^1.0.2",
-    "sequelize": "^6.6.2"
+    "node-prune": "^1.0.2"
   },
   "devDependencies": {
     "@types/compression": "^1.7.0",

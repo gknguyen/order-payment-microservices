@@ -1,7 +1,7 @@
 import debug from 'debug';
 import http from 'http';
 import ENV from './config/env';
-import mysql from './database/mysql/mysql.auth';
+import mongodb from './database/mongo.auth';
 import { initData } from './init.data';
 import app from './middleware';
 
@@ -11,12 +11,13 @@ const logger = debug('server');
 /**
  * connect to Database
  * */
-mysql.sync({ alter: false, force: false }).catch((err: Error) => err.toString());
-mysql
-  .authenticate()
-  .then(() => logger(`Connected to database: ${ENV.DATABASES.SQL.MYSQL.CONNECTION}`))
-  .then(() => initData())
-  .catch((err: Error) => logger(`Unable to connect to the database: ${err.toString()}`));
+mongodb.on('error', (err) =>
+  logger(`Unable to connect to the database: ${err.toString()}`),
+);
+mongodb.once('open', () => {
+  logger(`Connected to database: ${ENV.DATABASES.NOSQL.MONGO_DB.CONNECTION}`);
+  initData();
+});
 
 /**
  * start server

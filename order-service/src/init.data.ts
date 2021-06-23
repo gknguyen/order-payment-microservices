@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import ENV from './config/env';
 import VARIABLE from './config/variable';
-import MYSQL from './database/mysql/mysql.main';
+import MONGO from './database/mongo.main';
 
 export const initFolder = () => {
   const mainLogFolderPath = path.join(__dirname, `../${VARIABLE.COMMON.LOG.MAIN_FOLDER}`);
@@ -22,13 +22,19 @@ export const initFolder = () => {
 };
 
 export const initData = () => {
-  MYSQL.user.findOrCreate({
-    where: {
+  MONGO.user.findOneAndUpdate(
+    {
       username: 'admin',
     },
-    defaults: {
+    {
       username: 'admin',
       password: Crypto.AES.encrypt('admin', ENV.CRYPTO.SECRET).toString(),
     },
-  });
+    {
+      new: true,
+      upsert: true,
+      setDefaultsOnInsert: true,
+    },
+    (err) => err && console.error(err),
+  );
 };

@@ -24,11 +24,7 @@ const errorHandler =
         const token = req.headers.token as string;
         const userInfo = jsonwebtoken.decode(token) as UserInfo;
 
-        let errorMessage = error.toString();
-        errorMessage = errorMessage.replace(
-          'SequelizeValidationError: notNull Violation: ',
-          '',
-        );
+        const errorMessage = error.toString();
         console.error(`errorHandler: ${errorMessage}`);
         console.error(
           `jaMoment: ${util.formatDate(new Date())} at function ${result.function}`,

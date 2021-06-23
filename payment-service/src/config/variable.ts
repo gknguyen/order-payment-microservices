@@ -1,6 +1,5 @@
 import common from '../variables/common.json';
 import messages from '../variables/messages.json';
-import queries from '../variables/queries.json';
 import { HTTPdata } from './type';
 
 const VARIABLE = {
@@ -13,8 +12,6 @@ const VARIABLE = {
   COMMON: common,
 
   MESSAGES: messages,
-
-  QUERIES: queries,
 };
 
 export default VARIABLE;

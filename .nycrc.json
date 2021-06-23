@@ -27,6 +27,6 @@
     "lcov",
     "json"
   ],
-  "report-dir": "./reports/tests/unit/coverage",
-  "temp-dir": "./reports/tests/unit/.nyc_output"
+  "report-dir": "./.reports/tests/unit/coverage",
+  "temp-dir": "./.reports/tests/unit/.nyc_output"
 }

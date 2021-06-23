@@ -16,9 +16,9 @@ const ENV = {
   },
 
   DATABASES: {
-    SQL: {
-      MYSQL: {
-        CONNECTION: process.env.MYSQL_CONNECTION || '',
+    NOSQL: {
+      MONGO_DB: {
+        CONNECTION: process.env.MONGODB_CONNECTION || '',
       },
     },
   },

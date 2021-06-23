@@ -24,11 +24,7 @@ const errorHandler =
         const token = req.headers.token as string;
         const userInfo = jsonwebtoken.decode(token) as UserInfo;
 
-        let errorMessage = error.toString();
-        errorMessage = errorMessage.replace(
-          'SequelizeValidationError: notNull Violation: ',
-          '',
-        );
+        const errorMessage = error.toString();
         console.error(`errorHandler: ${errorMessage}`);
         console.error(
           `jaMoment: ${util.formatDate(new Date())} at function ${result.function}`,
@@ -53,10 +49,10 @@ const errorHandler =
         );
 
         /** if error, rollback the transaction */
-        if (result.transaction)
-          await result.transaction
-            .rollback()
-            .catch((err) => console.error(err.toString()));
+        if (result.session) {
+          await result.session.abortTransaction();
+          result.session.endSession();
+        }
 
         /** send response to client-side (FE) */
         res.status(result.code || STATUS_CODE.INTERNAL_SERVER_ERROR).send(errorMessage);

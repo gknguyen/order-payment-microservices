@@ -4,7 +4,7 @@ import STATUS_CODE from 'http-status';
 import { PaymentStatus } from '../../config/enum';
 import errorHandler from '../../config/error.handler';
 import VARIABLE from '../../config/variable';
-import { Order } from '../../database/mysql/mysql.form';
+import { Order } from '../../database/mongo.form';
 
 const paymentRouter = express.Router();
 
@@ -24,7 +24,7 @@ function processOrder() {
     const order: Order | null | undefined = req.body.order;
 
     /** check input */
-    if (order?.id && order?.name && order?.status) {
+    if (order?._id && order?.name && order?.status) {
       /** send response to client-side (FE) */
       if (faker.datatype.number() % 2 === 0)
         res.status(STATUS_CODE.OK).send(PaymentStatus.confirmed);

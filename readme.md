@@ -3,14 +3,14 @@
 ## Description
 
 - This project contains 2 small services: Order App & Payment App
-- 2 Apps are connect with MYSQL service for data store & authentication
+- 2 Apps are connect with MongoDB service for data store & authentication
 
 ```mermaid
 graph LR
-    Order & Payment -. auth .-> MySQL
+    Order & Payment -. auth .-> MongoDB
     Order -- process --> Payment
     Payment -- response --> Order
-    MySQL -. response .-> Order & Payment
+    MongoDB -. response .-> Order & Payment
 ```
 
 ## Technical Approach
@@ -25,9 +25,9 @@ graph LR
 
 - hash login password: cryptojs
 
-- Database: MySQL
+- Database: MongoDB
 
-- ORM: Sequelize
+- ODM: mongoose
 
 - Formatter: Prettier
 

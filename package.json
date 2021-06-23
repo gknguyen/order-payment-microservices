@@ -14,12 +14,12 @@
   },
   "homepage": "https://github.com/gknguyen/order-payment-microservices#readme",
   "scripts": {
-    "test:UT": "nyc mocha ./tests/unit/**/*.test.ts --reporter-options reportDir=reports/tests/unit --reporter-options jsonReport=true",
-    "test:IT": "mocha ./tests/integration/**/*.test.ts --reporter-options reportDir=reports/tests/integration --reporter-options jsonReport=true",
-    "complex": "ts-plato --recurse --quiet --eslint ./.eslintrc --noempty --dir ./reports/complex ./order-service/src ./payment-service/src",
+    "test:UT": "nyc mocha ./tests/unit/**/*.test.ts --reporter-options reportDir=.reports/tests/unit --reporter-options jsonReport=true",
+    "test:IT": "mocha ./tests/integration/**/*.test.ts --reporter-options reportDir=.reports/tests/integration --reporter-options jsonReport=true",
+    "complex": "ts-plato --recurse --quiet --eslint ./.eslintrc --noempty --dir ./.reports/complex ./order-service/src ./payment-service/src",
     "prettier": "prettier --write ./order-service/src --write ./payment-service/src",
-    "eslint:order": "eslint --quiet ./order-service/src --ext .js,.ts --format node_modules/eslint-html-reporter/reporter.js --output-file reports/eslint/order/report.html",
-    "eslint:payment": "eslint --quiet ./payment-service/src --ext .js,.ts --format node_modules/eslint-html-reporter/reporter.js --output-file reports/eslint/payment/report.html",
+    "eslint:order": "eslint --quiet ./order-service/src --ext .js,.ts --format node_modules/eslint-html-reporter/reporter.js --output-file .reports/eslint/order/report.html",
+    "eslint:payment": "eslint --quiet ./payment-service/src --ext .js,.ts --format node_modules/eslint-html-reporter/reporter.js --output-file .reports/eslint/payment/report.html",
     "review": "concurrently \"npm run prettier\" \"npm run eslint:order\" \"npm run eslint:payment\""
   },
   "husky": {
@@ -30,7 +30,8 @@
   "dependencies": {
     "concurrently": "^6.2.0",
     "dotenv": "^10.0.0",
-    "http-status": "^1.5.0"
+    "http-status": "^1.5.0",
+    "mongoose": "^5.12.14"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.1",

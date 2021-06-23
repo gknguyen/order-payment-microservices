@@ -2,7 +2,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import STATUS_CODE from 'http-status';
 import VARIABLE from '../../../order-service/src/config/variable';
-import MYSQL from '../../../order-service/src/database/mysql/mysql.main';
+import MONGO from '../../../order-service/src/database/mongo.main';
 import orderServer from '../../../order-service/src/server';
 import MOCK from '../../mock.data';
 
@@ -11,31 +11,24 @@ chai.use(chaiHttp);
 describe('Unit test - Order service - login feature', () => {
   const orderName = 'test check';
 
-  let orderId: number;
+  // let orderId: number;
+  let orderId: string;
 
   describe('/api/auth/login', () => {
     before((done) => {
-      // ENV.NODE_ENV = MOCK.ENV.NODE_ENV;
-      // ENV.PORT = MOCK.ENV.PORT;
-      // ENV.COOKIE.SECRET = MOCK.ENV.COOKIE_SECRET;
-      // ENV.CRYPTO.SECRET = MOCK.ENV.CRYPTO_SECRET;
-      // ENV.JWT.SECRET = MOCK.ENV.JWT_SECRET;
-      // ENV.JWT.EXPIRES_IN = MOCK.ENV.JWT_EXPIRES_IN;
-      // ENV.MOMENT.LOCALE = MOCK.ENV.MOMENT_LOCALE;
-      // ENV.MOMENT.TIMEZONE = MOCK.ENV.MOMENT_TIMEZONE;
-      // ENV.DATABASES.SQL.MYSQL.CONNECTION = MOCK.ENV.MYSQL_CONNECTION;
-
       /** create mock data in DB */
-      MYSQL.order
-        .findOrCreate({
-          where: { name: orderName },
-          defaults: { name: orderName },
-        })
-        .then((dataList) => {
-          orderId = dataList[0].id;
-          done();
-        })
-        .catch((err) => console.error(err));
+      MONGO.order.findOneAndUpdate(
+        { name: orderName },
+        { name: orderName },
+        { new: true, upsert: true, setDefaultsOnInsert: true },
+        (err, res) => {
+          if (err) console.error(err);
+          else {
+            orderId = res._id;
+            done();
+          }
+        },
+      );
     });
 
     describe('happy cases', () => {

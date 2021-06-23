@@ -1,15 +1,15 @@
 import axios from 'axios';
 import express from 'express';
 import STATUS_CODE from 'http-status';
-import sequelize from 'sequelize';
+import mongoose from 'mongoose';
 import { OrderStatus, PaymentStatus } from '../../config/enum';
 import ENV from '../../config/env';
 import errorHandler from '../../config/error.handler';
 import util from '../../config/util';
 import VARIABLE from '../../config/variable';
-import mysql from '../../database/mysql/mysql.auth';
-import { Order } from '../../database/mysql/mysql.form';
-import MYSQL from '../../database/mysql/mysql.main';
+import mongodb from '../../database/mongo.auth';
+import { Order } from '../../database/mongo.form';
+import MONGO from '../../database/mongo.main';
 
 const orderRouter = express.Router();
 
@@ -44,10 +44,7 @@ function checkOrderStatus() {
     /** check input */
     if (orderId) {
       /** call query to get data */
-      const order = await MYSQL.order.findOne({
-        attributes: ['id', 'status'],
-        where: { id: orderId },
-      });
+      const order = await MONGO.order.findById(orderId, ['status']);
 
       /** send response to client-side (FE) */
       res.setHeader('Content-Type', 'text/plain; charset=utf-8');
@@ -69,23 +66,21 @@ function createOrder() {
       const orderName: string | null | undefined = req.body.name;
 
       /** transaction for handling error when modify multiple tables in 1 process */
-      const transaction =
-        (req.body.transaction as sequelize.Transaction) || (await mysql.transaction());
-      if (!req.body.transaction) req.body.transaction = transaction;
-      if (!result.transaction) result.transaction = transaction;
+      const session =
+        (req.body.session as mongoose.ClientSession) || (await mongodb.startSession());
+      if (!req.body.session) req.body.session = session;
+      if (!result.session) result.session = session;
+      if (!session.inTransaction()) session.startTransaction();
 
       /** check input */
       if (orderName) {
         /** call query to create data */
-        const order = await MYSQL.order.create(
-          {
-            name: orderName,
-          },
-          { transaction: transaction },
-        );
+        const orderList = await MONGO.order.create([{ name: orderName }], {
+          session: session,
+        });
 
         /** continues the execution */
-        req.body.order = order;
+        req.body.order = orderList[0];
         next();
       } else {
         result.code = STATUS_CODE.PRECONDITION_FAILED;
@@ -107,10 +102,11 @@ function processPayment() {
       const order: Order | null | undefined = req.body.order;
 
       /** transaction for handling error when modify multiple tables in 1 process */
-      const transaction =
-        (req.body.transaction as sequelize.Transaction) || (await mysql.transaction());
-      if (!req.body.transaction) req.body.transaction = transaction;
-      if (!result.transaction) result.transaction = transaction;
+      const session =
+        (req.body.session as mongoose.ClientSession) || (await mongodb.startSession());
+      if (!req.body.session) req.body.session = session;
+      if (!result.session) result.session = session;
+      if (!session.inTransaction()) session.startTransaction();
 
       /** check input */
       if (order?.id) {
@@ -135,7 +131,7 @@ function processPayment() {
               next();
             } else {
               /** send response to client-side (FE) */
-              await transaction.rollback();
+              await session.abortTransaction();
               res.setHeader('Content-Type', 'text/plain; charset=utf-8');
               res
                 .status(err.response?.status || STATUS_CODE.INTERNAL_SERVER_ERROR)
@@ -162,10 +158,11 @@ function updateOrder() {
       const paymentStatus: PaymentStatus | null | undefined = req.body.paymentStatus;
 
       /** transaction for handling error when modify multiple tables in 1 process */
-      const transaction =
-        (req.body.transaction as sequelize.Transaction) || (await mysql.transaction());
-      if (!req.body.transaction) req.body.transaction = transaction;
-      if (!result.transaction) result.transaction = transaction;
+      const session =
+        (req.body.session as mongoose.ClientSession) || (await mongodb.startSession());
+      if (!req.body.session) req.body.session = session;
+      if (!result.session) result.session = session;
+      if (!session.inTransaction()) session.startTransaction();
 
       /** check input */
       if (orderId && paymentStatus) {
@@ -176,18 +173,19 @@ function updateOrder() {
             : OrderStatus.cancelled;
 
         /** call query to update data */
-        await MYSQL.order.update(
+        await MONGO.order.findByIdAndUpdate(
+          orderId,
           {
             status: orderStatus,
           },
           {
-            where: { id: orderId },
-            transaction: transaction,
+            session: session,
           },
         );
 
         /** send response to client-side (FE) */
-        await transaction.commit();
+        await session.commitTransaction();
+        session.endSession();
         if (orderStatus === OrderStatus.confirmed)
           res.status(STATUS_CODE.OK).send(orderStatus);
         else res.status(STATUS_CODE.EXPECTATION_FAILED).send(orderStatus);
@@ -209,36 +207,26 @@ function deliverOrder() {
     const orderId = req.query.id as string;
 
     /** call query to update data */
-    setTimeout(() => {
-      MYSQL.order.update(
-        {
-          status: OrderStatus.delivered,
-        },
-        {
-          where: { id: orderId },
-        },
-      );
+    setTimeout(async () => {
+      await MONGO.order.findByIdAndUpdate(orderId, {
+        status: OrderStatus.delivered,
+      });
     }, util.convertStringToNumber(ENV.DELIVERY_TIME) /** process run after Xs */);
   });
 }
 
 function cancelOrder() {
   const result = { ...VARIABLE.RESULT, function: 'cancelOrder()' };
-  return errorHandler(result, (req: express.Request, res: express.Response) => {
+  return errorHandler(result, async (req: express.Request, res: express.Response) => {
     /** get data from request query */
     const orderId: string | null | undefined = req.query.id as string;
 
     /** check input */
     if (orderId) {
       /** call query to update date */
-      MYSQL.order.update(
-        {
-          status: OrderStatus.cancelled,
-        },
-        {
-          where: { id: orderId },
-        },
-      );
+      await MONGO.order.findByIdAndUpdate(orderId, {
+        status: OrderStatus.cancelled,
+      });
 
       /** send response to client-side (FE) */
       res.status(STATUS_CODE.OK).send(OrderStatus.cancelled);

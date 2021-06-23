@@ -1,15 +1,4 @@
 const MOCK = {
-  ENV: {
-    NODE_ENV: 'test',
-    PORT: '4200',
-    COOKIE_SECRET: 'adsaldasdasds2423fdfsdf',
-    JWT_SECRET: 'sdfwwrcxvvbsdfd2342344',
-    JWT_EXPIRES_IN: '24h',
-    CRYPTO_SECRET: 'adafdasdas6d5asda8',
-    MOMENT_TIMEZONE: 'Asia/Ho_Chi_Minh',
-    MOMENT_LOCALE: 'en',
-    MYSQL_CONNECTION: 'mysql://root:@127.0.0.1:3306/order_payment',
-  },
   URL: {
     ORDER_SERVICE: {
       BASE: 'http://localhost:4000',

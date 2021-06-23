@@ -19,7 +19,7 @@
     "DATA_INVALID": "Token data do not match with DB data"
   },
   "DATABASES": {
-    "MYSQL": {
+    "MONGO": {
       "USER_TABLE": {
         "UNIQUE_USERNAME": "This account already exists",
         "USERNAME_NOT_NULL": "Username cannot be empty",

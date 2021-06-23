@@ -4,7 +4,7 @@ import jsonwebtoken from 'jsonwebtoken';
 import errorHandler from '../../config/error.handler';
 import { UserInfo } from '../../config/type';
 import VARIABLE from '../../config/variable';
-import MYSQL from '../../database/mysql/mysql.main';
+import MONGO from '../../database/mongo.main';
 import authService from './auth.services';
 
 const authRouter = express.Router();
@@ -29,10 +29,12 @@ function login() {
     /** check input */
     if (loginUsername && loginPassword) {
       /** call query to get user infomation */
-      const user = await MYSQL.user.findOne({
-        attributes: ['id', 'username', 'password'],
-        where: { username: loginUsername },
-      });
+      const user = await MONGO.user.findOne(
+        {
+          username: loginUsername,
+        },
+        ['username', 'password'],
+      );
 
       /** check if user existed or not */
       if (user) {
@@ -78,13 +80,13 @@ export function verifyToken() {
 
           if (decodedToken && parseInt(decodedToken.payload.exp) > TTL) {
             /** get user data in token is existed in DB */
-            const user = await MYSQL.user.findOne({
-              attributes: ['id', 'username'],
-              where: {
-                id: userInfo.id,
+            const user = await MONGO.user.findOne(
+              {
+                _id: userInfo.id,
                 username: userInfo.username,
               },
-            });
+              ['username'],
+            );
 
             /** continues the execution if pass */
             if (user) next();

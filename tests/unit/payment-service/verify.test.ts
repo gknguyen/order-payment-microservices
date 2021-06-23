@@ -1,9 +1,9 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import STATUS_CODE from 'http-status';
-import MYSQL from '../../../order-service/src/database/mysql/mysql.main';
+import MONGO from '../../../order-service/src/database/mongo.main';
 import { PaymentStatus } from '../../../payment-service/src/config/enum';
-import { Order } from '../../../payment-service/src/database/mysql/mysql.form';
+import { Order } from '../../../payment-service/src/database/mongoDB/mongo.form';
 import paymentServer from '../../../payment-service/src/server';
 import MOCK from '../../mock.data';
 
@@ -14,16 +14,18 @@ describe('Unit test - Payment service - verify JWT feature', () => {
   let order: Order;
 
   before((done) => {
-    MYSQL.order
-      .findOrCreate({
-        where: { name: orderName },
-        defaults: { name: orderName },
-      })
-      .then((dataList) => {
-        order = dataList[0];
-        done();
-      })
-      .catch((err) => console.error(err));
+    MONGO.order.findOneAndUpdate(
+      { name: orderName },
+      { name: orderName },
+      { new: true, upsert: true, setDefaultsOnInsert: true },
+      (err, res) => {
+        if (err) console.error(err);
+        else {
+          order = res;
+          done();
+        }
+      },
+    );
   });
 
   it('JWT not found', (done) => {

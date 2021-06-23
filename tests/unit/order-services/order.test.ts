@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import STATUS_CODE from 'http-status';
 import { OrderStatus } from '../../../order-service/src/config/enum';
 import VARIABLE from '../../../order-service/src/config/variable';
-import MYSQL from '../../../order-service/src/database/mysql/mysql.main';
+import MONGO from '../../../order-service/src/database/mongo.main';
 import orderServer from '../../../order-service/src/server';
 import MOCK from '../../mock.data';
 
@@ -31,19 +31,22 @@ describe('Unit test - Order service - process order feature', () => {
 
   describe('/api/order/checkOrderStatus', () => {
     const orderName = 'test check';
-    let orderId: number;
+    // let orderId: number;
+    let orderId: string;
 
     before((done) => {
-      MYSQL.order
-        .findOrCreate({
-          where: { name: orderName },
-          defaults: { name: orderName },
-        })
-        .then((dataList) => {
-          orderId = dataList[0].id;
-          done();
-        })
-        .catch((err) => console.error(err));
+      MONGO.order.findOneAndUpdate(
+        { name: orderName },
+        { name: orderName },
+        { new: true, upsert: true, setDefaultsOnInsert: true },
+        (err, res) => {
+          if (err) console.error(err);
+          else {
+            orderId = res._id;
+            done();
+          }
+        },
+      );
     });
 
     describe('happy cases', () => {
@@ -81,7 +84,11 @@ describe('Unit test - Order service - process order feature', () => {
       it('invalid id', (done) => {
         chai
           .request(orderServer)
-          .get(`${MOCK.URL.ORDER_SERVICE.API.CHECK_ORDER_STATUS}?id=${1000000}`)
+          .get(
+            `${
+              MOCK.URL.ORDER_SERVICE.API.CHECK_ORDER_STATUS
+            }?id=${'60d2ac6ba69d7ed3ed5a03e4'}`,
+          )
           .set('token', TOKEN)
           .end((err, res) => {
             if (err) console.error(err);
@@ -133,30 +140,31 @@ describe('Unit test - Order service - process order feature', () => {
     });
 
     after((done) => {
-      MYSQL.order
-        .destroy({
-          where: { name: orderName },
-        })
-        .then(() => done())
-        .catch((err) => console.error(err));
+      MONGO.order.findOneAndDelete({ name: orderName }, undefined, (err) => {
+        if (err) console.error(err);
+        else done();
+      });
     });
   });
 
   describe('/api/order/cancelOrder', () => {
     const orderName = 'test cancel';
-    let orderId: number;
+    // let orderId: number;
+    let orderId: string;
 
     before((done) => {
-      MYSQL.order
-        .findOrCreate({
-          where: { name: orderName },
-          defaults: { name: orderName },
-        })
-        .then((dataList) => {
-          orderId = dataList[0].id;
-          done();
-        })
-        .catch((err) => console.error(err));
+      MONGO.order.findOneAndUpdate(
+        { name: orderName },
+        { name: orderName },
+        { new: true, upsert: true, setDefaultsOnInsert: true },
+        (err, res) => {
+          if (err) console.error(err);
+          else {
+            orderId = res._id;
+            done();
+          }
+        },
+      );
     });
 
     describe('happy cases', () => {
@@ -190,12 +198,10 @@ describe('Unit test - Order service - process order feature', () => {
     });
 
     after((done) => {
-      MYSQL.order
-        .destroy({
-          where: { name: orderName },
-        })
-        .then(() => done())
-        .catch((err) => console.error(err));
+      MONGO.order.findOneAndDelete({ name: orderName }, undefined, (err) => {
+        if (err) console.error(err);
+        else done();
+      });
     });
   });
 });
